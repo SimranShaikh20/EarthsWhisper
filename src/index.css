@@ -1,0 +1,173 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Earth's Last Letter — design tokens
+   Deep night sky + parchment letter aesthetic.
+   All colors HSL.
+*/
+
+@layer base {
+  :root {
+    /* Night sky base */
+    --background: 210 55% 7%;          /* #0a1628 deep navy */
+    --foreground: 40 30% 92%;
+
+    --card: 210 50% 10%;
+    --card-foreground: 40 30% 92%;
+
+    --popover: 210 50% 10%;
+    --popover-foreground: 40 30% 92%;
+
+    /* Forest green — primary */
+    --primary: 142 45% 42%;
+    --primary-foreground: 40 40% 96%;
+    --primary-glow: 142 60% 55%;
+
+    /* Muted teal */
+    --secondary: 180 30% 25%;
+    --secondary-foreground: 40 30% 92%;
+
+    --muted: 210 30% 15%;
+    --muted-foreground: 40 15% 70%;
+
+    /* Warm amber accent */
+    --accent: 36 75% 55%;
+    --accent-foreground: 210 55% 10%;
+
+    --destructive: 0 70% 50%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 210 30% 20%;
+    --input: 210 30% 18%;
+    --ring: 142 45% 50%;
+
+    --radius: 0.75rem;
+
+    /* Parchment letter */
+    --parchment: 38 45% 93%;           /* #f5f0e8 */
+    --parchment-edge: 35 35% 82%;
+    --ink: 22 50% 12%;                 /* #2c1810 */
+    --ink-faded: 22 35% 28%;
+
+    /* Gradients */
+    --gradient-sky: radial-gradient(ellipse at top, hsl(210 55% 12%) 0%, hsl(210 60% 5%) 70%);
+    --gradient-forest: linear-gradient(135deg, hsl(142 45% 38%), hsl(160 50% 30%));
+    --gradient-amber: linear-gradient(135deg, hsl(36 75% 55%), hsl(28 70% 48%));
+
+    /* Shadows */
+    --shadow-letter:
+      0 30px 60px -20px hsl(0 0% 0% / 0.6),
+      0 0 0 1px hsl(35 35% 70% / 0.3),
+      inset 0 0 80px hsl(35 40% 75% / 0.15);
+    --shadow-glow: 0 0 40px hsl(142 60% 50% / 0.35);
+
+    /* Sidebar (unused but kept) */
+    --sidebar-background: 210 50% 8%;
+    --sidebar-foreground: 40 30% 92%;
+    --sidebar-primary: 142 45% 42%;
+    --sidebar-primary-foreground: 40 40% 96%;
+    --sidebar-accent: 210 30% 15%;
+    --sidebar-accent-foreground: 40 30% 92%;
+    --sidebar-border: 210 30% 20%;
+    --sidebar-ring: 142 45% 50%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html, body, #root {
+    @apply min-h-screen;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    background: var(--gradient-sky);
+    background-attachment: fixed;
+    font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  }
+}
+
+@layer utilities {
+  .font-serif-letter {
+    font-family: Georgia, 'Times New Roman', serif;
+  }
+  .font-handwritten {
+    font-family: 'Caveat', 'Brush Script MT', cursive;
+  }
+
+  /* Parchment paper texture via subtle noise + edges */
+  .parchment {
+    background-color: hsl(var(--parchment));
+    background-image:
+      radial-gradient(circle at 20% 10%, hsl(35 50% 80% / 0.35) 0%, transparent 40%),
+      radial-gradient(circle at 80% 90%, hsl(30 45% 70% / 0.25) 0%, transparent 45%),
+      radial-gradient(circle at 50% 50%, hsl(38 50% 88% / 0.4) 0%, transparent 70%);
+    color: hsl(var(--ink));
+    box-shadow: var(--shadow-letter);
+    position: relative;
+  }
+  .parchment::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image:
+      repeating-radial-gradient(circle at 30% 40%, hsl(25 30% 50% / 0.04) 0, hsl(25 30% 50% / 0.04) 1px, transparent 1px, transparent 4px),
+      repeating-radial-gradient(circle at 70% 60%, hsl(25 30% 40% / 0.03) 0, hsl(25 30% 40% / 0.03) 1px, transparent 1px, transparent 5px);
+    mix-blend-mode: multiply;
+    border-radius: inherit;
+  }
+
+  .text-ink { color: hsl(var(--ink)); }
+  .text-ink-faded { color: hsl(var(--ink-faded)); }
+
+  /* Postmark stamp */
+  .postmark {
+    border: 2px solid hsl(var(--ink-faded) / 0.6);
+    color: hsl(var(--ink-faded));
+    transform: rotate(-8deg);
+    font-family: Georgia, serif;
+    letter-spacing: 0.08em;
+  }
+
+  /* Floating particle */
+  .particle {
+    position: absolute;
+    border-radius: 9999px;
+    pointer-events: none;
+    will-change: transform, opacity;
+  }
+
+  /* Glow button */
+  .btn-glow {
+    box-shadow: var(--shadow-glow);
+  }
+}
+
+@layer base {
+  @keyframes float-up {
+    0% { transform: translateY(100vh) translateX(0) rotate(0deg); opacity: 0; }
+    10% { opacity: 0.7; }
+    90% { opacity: 0.5; }
+    100% { transform: translateY(-10vh) translateX(40px) rotate(360deg); opacity: 0; }
+  }
+  @keyframes pulse-slow {
+    0%, 100% { transform: scale(1); opacity: 0.9; }
+    50% { transform: scale(1.06); opacity: 1; }
+  }
+  @keyframes spin-slow {
+    to { transform: rotate(360deg); }
+  }
+  @keyframes fade-in-up {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes shimmer-text {
+    0%, 100% { opacity: 0.6; }
+    50% { opacity: 1; }
+  }
+}
